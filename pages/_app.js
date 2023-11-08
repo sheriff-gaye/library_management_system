@@ -14,8 +14,8 @@ import DefaultDashboardLayout from 'layouts/DefaultDashboardLayout';
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const pageURL = process.env.baseURL + router.pathname;
-  const title = "Dash UI - Next.Js Admin Dashboard Template";
-  const description = "Dash is a fully responsive and yet modern premium Nextjs template & snippets. Geek is feature-rich Nextjs components and beautifully designed pages that help you create the best possible website and web application projects. Nextjs Snippet "
+  const title = "libaray system";
+  const description = "Libraary system "
   const keywords = "Dash UI, Nextjs, Next.js, Course, Sass, landing, Marketing, admin themes, Nextjs admin, Nextjs dashboard, ui kit, web app, multipurpose"
 
   // Identify the layout, which will be applied conditionally

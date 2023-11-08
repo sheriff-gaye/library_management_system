@@ -1,23 +1,25 @@
-import { MoreHorizontal, MoreVertical, Pencil, Trash2 } from "lucide-react";
-import React, { useState } from "react";
+import { Copy, Eye, MoreHorizontal, MoreVertical, Pencil, Trash2 } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { Button, Dropdown, Table } from "react-bootstrap";
-import formatDate from "../../helpers/format.date";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { DeleteModals } from "../modals/confirm-delete";
 import { useRouter } from "next/navigation";
-import { CategoryModals } from "./category-modal";
+import { BooksModals } from "./books-modal";
 import Link from "next/link";
 
-const CategoryTable = ({ data }) => {
+const BooksTable = ({ data }) => {
+  const [authors, setAuthors] = useState([]);
+  const [category, setCategory] = useState([]);
+
   const [showDelete, setShowDelete] = useState(false);
   const [categoryIdToDelete, setCategoryIdToDelete] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   const [editData, setEditData] = useState();
 
-  const handleUpdate = (category) => {
-    setEditData(category);
+  const handleUpdate = (categoryData) => {
+    setEditData(categoryData);
     setShowModal(true);
   };
 
@@ -28,20 +30,46 @@ const CategoryTable = ({ data }) => {
 
   const handleCloseDeleteModal = () => setShowDelete(false);
 
+  const getAuthors = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_APP_URL}/authors`
+      );
+      setAuthors(response.data);
+    } catch (error) {
+      console.error("Error fetching authors:", error);
+    }
+  };
+
+  const getCategories = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_APP_URL}/category`
+      );
+      setCategory(response.data);
+    } catch (error) {
+      console.error("Error fetching authors:", error);
+    }
+  };
+
+  useEffect(() => {
+    getAuthors();
+    getCategories();
+  }, []);
+
   const router = useRouter();
 
   const onDelete = async (id) => {
     try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_APP_URL}/category/${id}`);
+      await axios.delete(`${process.env.NEXT_PUBLIC_APP_URL}/books/${id}`);
       router.refresh();
-      toast.success("Category Deleted Successfully");
+      toast.success("Book Deleted Successfully");
       handleCloseDeleteModal();
     } catch (error) {
       toast.error("Something went wrong");
       handleCloseDeleteModal();
     }
   };
-
 
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     (<Link
@@ -59,17 +87,29 @@ const CategoryTable = ({ data }) => {
 CustomToggle.displayName = 'CustomToggle';
 
   return (
-    <div className="table-responsive d-flex justify-content-between px-5 py-5 table-responsive">
-      <Table className="text-nowrap table overflow-x-scroll  table ">
-        <thead className="table-dark">
+    <div className="table-responsive d-flex justify-content-between  px-12 py-5">
+      <Table className="text-nowrap table overflow-x-scroll align-middle">
+        <thead className="table-dark justify-content-around">
           <tr>
             <th scope="col" className="text-white text-uppercase">
-              name
+              category
             </th>
             <th scope="col" className="text-white text-uppercase">
-              created at
+              title
             </th>
             <th scope="col" className="text-white text-uppercase">
+              author
+            </th>
+            <th scope="col" className="text-white text-uppercase">
+              Copies
+            </th>
+            <th scope="col" className="text-white text-uppercase">
+              publisher
+            </th>
+            <th
+              scope="col"
+              className="text-white text-uppercase justify-content-end"
+            >
               action
             </th>
           </tr>
@@ -78,19 +118,40 @@ CustomToggle.displayName = 'CustomToggle';
           {data.length > 0 ? (
             data.map((item) => (
               <tr key={item.id}>
-                <td>{item.name}</td>
-                <td>{formatDate(item.createdAt)}</td>
+                <td  className="align-middle">
+                  {
+                    category.find((category) => category.id === item.categoryId)
+                      ?.name
+                  }
+                </td>
+                <td className="align-middle">{item.title}</td>
                 <td>
+                  {
+                   authors.find(author => author.id === item.authorId)?.firstName + " " + authors.find(author => author.id === item.authorId)?.lastName
+
+                  }
+                </td>
+
+                <td className="align-middle"> {item.copies}</td>
+                <td className="align-middle">{item.publisher}</td>
+                <td className="align-middle">
                   <Dropdown>
                     <Dropdown.Toggle
                       variant="link"
                       id="dropdown-basic"
                       as={CustomToggle}
+                     
                     >
                       <MoreVertical className="text-muted" />
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu align="right">
+                      <Dropdown.Item
+                        onClick={() => router.push(`books/${item.id}`)}
+                      >
+                        <Eye size={15} className="text-warning" /> View
+                      </Dropdown.Item>
+
                       <Dropdown.Item onClick={() => handleUpdate(item)}>
                         <Pencil size={15} className="text-primary" /> Update
                       </Dropdown.Item>
@@ -104,7 +165,7 @@ CustomToggle.displayName = 'CustomToggle';
             ))
           ) : (
             <tr>
-              <td colSpan="3" className="text-center">
+              <td colSpan="5" className="text-center">
                 <div className="d-flex justify-content-center">
                   <span className="fs-4">No data available.</span>
                 </div>
@@ -119,7 +180,7 @@ CustomToggle.displayName = 'CustomToggle';
         onConfirm={() => onDelete(categoryIdToDelete)}
       />
 
-      <CategoryModals
+      <BooksModals
         showModal={showModal}
         onClose={() => setShowModal(false)}
         editData={editData}
@@ -128,4 +189,4 @@ CustomToggle.displayName = 'CustomToggle';
   );
 };
 
-export default CategoryTable;
+export default BooksTable;

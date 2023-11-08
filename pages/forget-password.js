@@ -14,15 +14,10 @@ const ForgetPassword = () => {
           {/* Card body */}
           <Card.Body className="p-6">
             <div className="mb-4">
-              <Link href="/">
-                <Image
-                  src="/images/brand/logo/logo-primary.svg"
-                  className="mb-2"
-                  alt=""
-                />
-              </Link>
-              <p className="mb-6">
-                Don&apos;t worry, we&apos;ll send you an email to reset your
+            
+            <h3 className="text-center text-uppercase text-primary fw-bold">forget password</h3>
+              <p className="mb-6 text-center">
+                we&apos;ll send you an email to reset your
                 password.
               </p>
             </div>
@@ -45,7 +40,7 @@ const ForgetPassword = () => {
               </div>
               <span>
                 Don&apos;t have an account?{" "}
-                <Link href="/authentication/sign-in">Sign In</Link>
+                <Link href="/">Sign In</Link>
               </span>
             </Form>
           </Card.Body>
