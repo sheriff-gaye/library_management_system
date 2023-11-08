@@ -29,7 +29,7 @@ const SingleBook = () => {
   const getAuthors = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_APP_URL}/author`
+        `${process.env.NEXT_PUBLIC_APP_URL}/authors`
       );
       setAuthors(response.data);
     } catch (error) {
@@ -96,10 +96,11 @@ const SingleBook = () => {
                   </p>
                   <p>
                     <span className="fw-bold">Author: </span>{" "}
-                    {
+                    {authors.find((author) => author.id === bookData.authorId)
+                      ?.firstName +
+                      " " +
                       authors.find((author) => author.id === bookData.authorId)
-                        ?.fullName
-                    }
+                        ?.lastName}
                   </p>
                   <p>
                     <span className="fw-bold">Publisher: </span>
@@ -111,7 +112,7 @@ const SingleBook = () => {
                   </p>
                   <p>
                     <span className="fw-bold">Published Date: </span>
-                    {formatDate(new Date(bookData.publication_date))}
+                    {formatDate(new Date(bookData.publish_date))}
                   </p>
                 </div>
               </Card.Text>
