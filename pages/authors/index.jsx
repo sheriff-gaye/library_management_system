@@ -5,14 +5,21 @@ import { FilePdf } from "react-bootstrap-icons";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { AuthorsModal } from "../../components/authors/author-modal";
+import Cookies from "js-cookie";
 
 const AuthorsPage = () => {
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
   const getAuthors = async () => {
+    const token = Cookies.get('token');
+
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_APP_URL + "/authors"
+      process.env.NEXT_PUBLIC_APP_URL + "/authors",{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
     );
     setData(response.data);
   };

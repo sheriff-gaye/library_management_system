@@ -13,8 +13,6 @@ const SingleStudent = () => {
   const [studentData, setStudentData] = useState([]);
   const [levels, setLevels] = useState([]);
 
-  console.log(params.studentId)
-
 
   const fetchStudent = async () => {
     try {
@@ -29,8 +27,8 @@ const SingleStudent = () => {
 
   const getLevels = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_APP_URL}/levels`
+      const response = await axios.get( 
+        `${process.env.NEXT_PUBLIC_APP_URL}/level`
       );
       setLevels(response.data);
     } catch (error) {
@@ -87,19 +85,19 @@ const SingleStudent = () => {
                   </p>
                   <p>
                     <span className="fw-bold">Date of Birth : </span>
-                    {studentData.date_of_birth}
+                    {studentData.dOB}
                   </p>
 
                   <p>
                     <span className="fw-bold">Student No : </span>
-                    {studentData.student_no}
+                    {studentData.studentId}
                   </p>
                   <p>
                     <span className="fw-bold">Category: </span>{" "}
                     {
                       levels.find(
                         (level) => level.id === studentData.levelId
-                      )?.level_name
+                      )?.name
                     }
                   </p>
                  

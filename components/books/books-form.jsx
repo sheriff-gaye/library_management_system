@@ -3,6 +3,7 @@ import { Button, Form } from "react-bootstrap";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const BookForm = ({ editData }) => {
   const router = useRouter();
@@ -18,17 +19,26 @@ const BookForm = ({ editData }) => {
     publish_date: editData ? editData.publish_date : "",
     copies: editData ? editData.copies : ""
   });
+  const token = Cookies.get('token');
 
   const getCategoris = async () => {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_APP_URL + "/category"
+      process.env.NEXT_PUBLIC_APP_URL + "/category",{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
     );
     setData(response.data);
   };
 
   const getAuthor = async () => {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_APP_URL + "/authors"
+      process.env.NEXT_PUBLIC_APP_URL + "/authors",{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
     );
     setAuthor(response.data);
   };
@@ -54,14 +64,24 @@ const BookForm = ({ editData }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    const token = Cookies.get('token');
+
     try {
       if (editData) {
         await axios.patch(
           `${process.env.NEXT_PUBLIC_APP_URL}/books/${editData.id}`,
-          formData
+          formData,{
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
         );
       } else {
-        await axios.post(`${process.env.NEXT_PUBLIC_APP_URL}/books`, formData);
+        await axios.post(`${process.env.NEXT_PUBLIC_APP_URL}/books`, formData,{
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
       }
       router.refresh();
       toast.success(message);

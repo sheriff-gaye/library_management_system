@@ -5,6 +5,8 @@ import toast from "react-hot-toast";
 import AuthLayout from "layouts/AuthLayout";
 import { useState } from "react";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
 
 const SignIn = () => {
   const [loginData, setLoginData] = useState({
@@ -28,11 +30,16 @@ const SignIn = () => {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_APP_URL}/login`,
         loginData
+        
       );
-      const tokenCookie = response.headers['token'];
-      console.log(tokenCookie)
-
+     
       if (response.status === 200) {
+        const { token } = response.data;
+        const decoded = jwtDecode(token);
+
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        Cookies.set('token', token, { expires: decoded.exp, sameSite: 'none', secure: true });
+
 
         toast.success("User Login successfully");
         router.push("/dashboard");
@@ -43,8 +50,6 @@ const SignIn = () => {
       toast.error("Something went wrong");
     }
   };
-
-  
 
   const requiredFields = [loginData.email, loginData.password];
 

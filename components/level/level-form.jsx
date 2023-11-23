@@ -3,6 +3,7 @@ import { Button, Form } from "react-bootstrap";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const LevelForm = ({ editData }) => {
   const router = useRouter();
@@ -19,14 +20,25 @@ const LevelForm = ({ editData }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    const token = Cookies.get("token");
+
     try {
       if (editData) {
         await axios.patch(
           `${process.env.NEXT_PUBLIC_APP_URL}/level/${editData.id}`,
-          formData
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
       } else {
-        await axios.post(`${process.env.NEXT_PUBLIC_APP_URL}/level`, formData);
+        await axios.post(`${process.env.NEXT_PUBLIC_APP_URL}/level`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
       }
       router.refresh();
       toast.success(message);
@@ -42,7 +54,6 @@ const LevelForm = ({ editData }) => {
       [name]: value
     });
   };
-
 
   const isNameValid = formData.name.trim() !== "";
 

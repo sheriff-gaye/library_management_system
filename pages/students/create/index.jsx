@@ -11,22 +11,21 @@ const CreateStudent = () => {
     firstname: "",
     lastname: "",
     gender: "",
-    date_of_birth: "",
+    dob: "",
     email: "",
-    student_no: "",
+    studentId: "",
     phone: "",
     levelId: ""
   });
 
   const router = useRouter();
 
-  console.log(studentData)
 
   const [levels, setLevel] = useState([]);
 
   const getLevel = async () => {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_APP_URL + "/levels"
+      process.env.NEXT_PUBLIC_APP_URL + "/level"
     );
     setLevel(response.data);
   };
@@ -65,8 +64,8 @@ const CreateStudent = () => {
     studentData.phone,
     studentData.email,
     studentData.levelId,
-    studentData.student_no,
-    studentData.date_of_birth
+    studentData.studentId,
+    studentData.dob
   ];
 
   const totalFields = requiredFields.length;
@@ -129,11 +128,11 @@ const CreateStudent = () => {
                 />
               </Form.Group>
 
-              <Form.Group controlId="date_of_birth" className="mb-3">
+              <Form.Group controlId="dob" className="mb-3">
                 <Form.Label>Date of Birth</Form.Label>
                 <Form.Control
                   type="date"
-                  name="date_of_birth"
+                  name="dob"
                   onChange={handleChange}
                   value={setStudentData.date_of_birth?.split("T")[0]}
                 />
@@ -164,11 +163,11 @@ const CreateStudent = () => {
                 </Form.Control>
               </Form.Group>
 
-              <Form.Group className="mb-3" controlId="student_no">
+              <Form.Group className="mb-3" controlId="studentId">
                 <Form.Label>Student No</Form.Label>
                 <Form.Control
                   type="text"
-                  name="student_no"
+                  name="studentId"
                   placeholder="Enter student no "
                   onChange={handleChange}
                   value={setStudentData.student_no}
@@ -187,7 +186,7 @@ const CreateStudent = () => {
 
                   {levels.map((level) => (
                     <option key={level.id} value={level.id}>
-                      {level.level_name}
+                      {level.name}
                     </option>
                   ))}
                 </Form.Control>

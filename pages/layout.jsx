@@ -1,8 +1,12 @@
 // import node module libraries
+import Cookies from "js-cookie";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Col, Row, Container, Image } from "react-bootstrap";
 
 const Layout = () => {
+
+
   return (
     <Container fluid className="px-6 py-4">
       <Row>

@@ -4,14 +4,21 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import BooksTable from "../../components/books/BooksTable";
 import { BooksModals } from "../../components/books/books-modal";
+import Cookies from "js-cookie";
 
 const BooksPage = () => {
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
   const getBooks = async () => {
+    const token = Cookies.get('token');
+
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_APP_URL + "/books"
+      process.env.NEXT_PUBLIC_APP_URL + "/books",{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
     );
     setData(response.data);
   };

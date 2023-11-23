@@ -1,4 +1,11 @@
-import { Copy, Eye, MoreHorizontal, MoreVertical, Pencil, Trash2 } from "lucide-react";
+import {
+  Copy,
+  Eye,
+  MoreHorizontal,
+  MoreVertical,
+  Pencil,
+  Trash2
+} from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Button, Dropdown, Table } from "react-bootstrap";
 import axios from "axios";
@@ -6,14 +13,22 @@ import toast from "react-hot-toast";
 import { DeleteModals } from "../modals/confirm-delete";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 const StudentsTable = ({ data }) => {
   const [levels, setLevels] = useState([]);
 
+  const token = Cookies.get("token");
+
   const getLevels = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_APP_URL}/levels`
+        `${process.env.NEXT_PUBLIC_APP_URL}/level`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
       );
       setLevels(response.data);
     } catch (error) {
@@ -21,12 +36,9 @@ const StudentsTable = ({ data }) => {
     }
   };
 
-
   useEffect(() => {
     getLevels();
-    
   }, []);
-
 
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <Link
@@ -45,7 +57,6 @@ const StudentsTable = ({ data }) => {
   CustomToggle.displayName = "CustomToggle";
 
   const router = useRouter();
-
 
   return (
     <div className="table-responsive d-flex justify-content-between  px-12 py-5">
@@ -83,37 +94,38 @@ const StudentsTable = ({ data }) => {
           {data.length > 0 ? (
             data.map((item) => (
               <tr key={item.id}>
-               
                 <td>{item.firstname}</td>
                 <td>{item.lastname}</td>
                 <td>{item.gender}</td>
                 <td>{item.email}</td>
-                <td>{item.student_no}</td>
+                <td>{item.studentId}</td>
                 <td>
-                  {
-                    levels.find((level) => level.id === item.levelId)
-                      ?.level_name
-                  }
+                  {levels.find((level) => level.id === item.levelId)?.name}
                 </td>
                 <td>
-                <Dropdown>
-                        <Dropdown.Toggle
-                          variant="link"
-                          id="dropdown-basic"
-                          as={CustomToggle}
-                        >
-                          <MoreVertical className="text-muted" />
-                        </Dropdown.Toggle>
+                  <Dropdown>
+                    <Dropdown.Toggle
+                      variant="link"
+                      id="dropdown-basic"
+                      as={CustomToggle}
+                    >
+                      <MoreVertical className="text-muted" />
+                    </Dropdown.Toggle>
 
-                        <Dropdown.Menu align="right">
-                          <Dropdown.Item>
-                            <Eye size={15} className="text-success" onClick={()=>router.push(`students/${item.id}`)} /> View
-                          </Dropdown.Item>
-                          <Dropdown.Item>
-                            <Trash2 size={15} className="text-danger" /> Delete
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
+                    <Dropdown.Menu align="right">
+                      <Dropdown.Item>
+                        <Eye
+                          size={15}
+                          className="text-success"
+                          onClick={() => router.push(`students/${item.id}`)}
+                        />{" "}
+                        View
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <Trash2 size={15} className="text-danger" /> Delete
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
                 </td>
               </tr>
             ))
@@ -128,7 +140,6 @@ const StudentsTable = ({ data }) => {
           )}
         </tbody>
       </Table>
-    
     </div>
   );
 };

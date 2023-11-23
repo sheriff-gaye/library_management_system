@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import formatDate from "../../../helpers/format.date";
 import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 const SingleBook = () => {
   const params = useParams();
@@ -14,11 +15,16 @@ const SingleBook = () => {
   const [bookData, setBookData] = useState([]);
   const [authors, setAuthors] = useState([]);
   const [category, setCategory] = useState([]);
+  const token = Cookies.get('token');
 
   const fetchBook = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_APP_URL}/books/${params.bookId}`
+        `${process.env.NEXT_PUBLIC_APP_URL}/books/${params.bookId}`,{
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
       );
       setBookData(response.data);
     } catch (error) {
@@ -29,7 +35,11 @@ const SingleBook = () => {
   const getAuthors = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_APP_URL}/authors`
+        `${process.env.NEXT_PUBLIC_APP_URL}/authors`,{
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
       );
       setAuthors(response.data);
     } catch (error) {
@@ -40,7 +50,11 @@ const SingleBook = () => {
   const getCategories = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_APP_URL}/category`
+        `${process.env.NEXT_PUBLIC_APP_URL}/category`,{
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
       );
       setCategory(response.data);
     } catch (error) {

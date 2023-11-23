@@ -8,6 +8,7 @@ import { DeleteModals } from "../modals/confirm-delete";
 import { useRouter } from "next/navigation";
 import { CategoryModals } from "./category-modal";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 const CategoryTable = ({ data }) => {
   const [showDelete, setShowDelete] = useState(false);
@@ -31,8 +32,14 @@ const CategoryTable = ({ data }) => {
   const router = useRouter();
 
   const onDelete = async (id) => {
+    const token = Cookies.get('token');
+
     try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_APP_URL}/category/${id}`);
+      await axios.delete(`${process.env.NEXT_PUBLIC_APP_URL}/category/${id}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       router.refresh();
       toast.success("Category Deleted Successfully");
       handleCloseDeleteModal();

@@ -8,6 +8,7 @@ import { DeleteModals } from "../modals/confirm-delete";
 import { useRouter } from "next/navigation";
 import { LevelModals } from "./level-modal";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 const LevelTable = ({ data }) => {
   const [showDelete, setShowDelete] = useState(false);
@@ -31,8 +32,13 @@ const LevelTable = ({ data }) => {
   const router = useRouter();
 
   const onDelete = async (id) => {
+    const token = Cookies.get("token");
     try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_APP_URL}/level/${id}`);
+      await axios.delete(`${process.env.NEXT_PUBLIC_APP_URL}/level/${id}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       router.refresh();
       toast.success("Level Deleted Successfully");
       handleCloseDeleteModal();

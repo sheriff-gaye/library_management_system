@@ -5,14 +5,21 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { LevelModals } from "../../components/level/level-modal";
 import LevelTable from "../../components/level/level-tabel";
+import Cookies from "js-cookie";
 
 const LevelPage = () => {
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const token = Cookies.get('token');
+
 
   const getLevel = async () => {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_APP_URL + "/level"
+      process.env.NEXT_PUBLIC_APP_URL + "/level",{
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }
     );
     setData(response.data);
   };

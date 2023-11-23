@@ -6,6 +6,7 @@ import { Button } from "react-bootstrap";
 import { CategoryModals } from "../../components/category/category-modal";
 import { useCookies } from "react-cookie"; // Import the cookies library if you're using it
 import { Plus } from "lucide-react";
+import Cookies from "js-cookie";
 
 
 const category = () => {
@@ -14,9 +15,15 @@ const category = () => {
 
   
   const getCategoris = async () => {
+    const token = Cookies.get('token');
+
 
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_APP_URL + "/category"
+      process.env.NEXT_PUBLIC_APP_URL + "/category", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
     );
     setData(response.data);
   };

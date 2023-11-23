@@ -11,7 +11,7 @@ const SignUp = () => {
     fullName: "",
     email: "",
     password: "",
-    confirmpassword: "", // Add a confirmPassword field
+    confirmpassword: "", 
   });
 
   const router = useRouter();
@@ -27,14 +27,14 @@ const SignUp = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if password and confirmPassword match
+
     if (userData.password !== userData.confirmpassword) {
       toast.error("The confirm-password field does not match the password field.");
       return;
     }
 
     try {
-      // Remove "confirmPassword" from the data sent to the database
+      
       const { confirmpassword, ...dataToSend } = userData;
 
        await axios.post(

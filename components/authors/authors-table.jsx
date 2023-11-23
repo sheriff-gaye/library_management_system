@@ -8,6 +8,7 @@ import { DeleteModals } from "../modals/confirm-delete";
 import { useRouter } from "next/navigation";
 import { AuthorsModal } from "./author-modal";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 const AuthorsTable = ({ data }) => {
   const [showDelete, setShowDelete] = useState(false);
@@ -31,8 +32,14 @@ const AuthorsTable = ({ data }) => {
   const router = useRouter();
 
   const onDelete = async (id) => {
+    const token = Cookies.get('token');
+
     try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_APP_URL}/authors/${id}`);
+      await axios.delete(`${process.env.NEXT_PUBLIC_APP_URL}/authors/${id}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       router.refresh();
       toast.success("Author Deleted Successfully");
       handleCloseDeleteModal();

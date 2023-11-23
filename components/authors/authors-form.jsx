@@ -3,6 +3,7 @@ import { Button, Form } from "react-bootstrap";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const AuthorsForm = ({ editData }) => {
   const router = useRouter();
@@ -17,18 +18,29 @@ const AuthorsForm = ({ editData }) => {
     ? "Authors Updated Successfully"
     : "Authors Created Successfully";
 
+    const token = Cookies.get('token');
+
+
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
       if (editData) {
         await axios.patch(
           `${process.env.NEXT_PUBLIC_APP_URL}/authors/${editData.id}`,
-          formData
+          formData,{
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
         );
       } else {
         await axios.post(
           `${process.env.NEXT_PUBLIC_APP_URL}/authors`,
-          formData
+          formData,{
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
         );
       }
       router.refresh();

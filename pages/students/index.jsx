@@ -4,13 +4,20 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import StudentsTable from "../../components/students/students-table";
 import toast from "react-hot-toast";
+import Cookies from "js-cookie";
 
 const StudentsPage = () => {
   const [data, setData] = useState([]);
+  const token = Cookies.get('token');
+
 
   const getStudents = async () => {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_APP_URL + "/students"
+      process.env.NEXT_PUBLIC_APP_URL + "/students",{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
     );
     setData(response.data);
   };

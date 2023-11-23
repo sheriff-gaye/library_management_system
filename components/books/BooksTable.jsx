@@ -7,6 +7,7 @@ import { DeleteModals } from "../modals/confirm-delete";
 import { useRouter } from "next/navigation";
 import { BooksModals } from "./books-modal";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 const BooksTable = ({ data }) => {
   const [authors, setAuthors] = useState([]);
@@ -17,6 +18,8 @@ const BooksTable = ({ data }) => {
   const [showModal, setShowModal] = useState(false);
 
   const [editData, setEditData] = useState();
+  const token = Cookies.get('token');
+
 
   const handleUpdate = (categoryData) => {
     setEditData(categoryData);
@@ -33,7 +36,11 @@ const BooksTable = ({ data }) => {
   const getAuthors = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_APP_URL}/authors`
+        `${process.env.NEXT_PUBLIC_APP_URL}/authors`,{
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
       );
       setAuthors(response.data);
     } catch (error) {
@@ -44,7 +51,11 @@ const BooksTable = ({ data }) => {
   const getCategories = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_APP_URL}/category`
+        `${process.env.NEXT_PUBLIC_APP_URL}/category`,{
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
       );
       setCategory(response.data);
     } catch (error) {
@@ -61,7 +72,11 @@ const BooksTable = ({ data }) => {
 
   const onDelete = async (id) => {
     try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_APP_URL}/books/${id}`);
+      await axios.delete(`${process.env.NEXT_PUBLIC_APP_URL}/books/${id}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       router.refresh();
       toast.success("Book Deleted Successfully");
       handleCloseDeleteModal();
