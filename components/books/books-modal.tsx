@@ -1,15 +1,16 @@
 import React from "react";
-import { Button, Modal } from "react-bootstrap";
-import AuthorsForm from "./authors-form";
+import { Button,  Modal } from "react-bootstrap";
+import BookForm from "./books-form";
 
-export const AuthorsModal = ({ showModal, onClose,editData }) => {
+export const BooksModals = ({ showModal, onClose,editData }) => {
   function MyVerticallyCenteredModal(props) {
-    const title=editData ? "Update Author" : "Create Author"
+    const title=editData ? "Update Book" : "Create Book"
     return (
       <Modal
         {...props}
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        size="lg"
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
@@ -17,11 +18,11 @@ export const AuthorsModal = ({ showModal, onClose,editData }) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <AuthorsForm  editData={editData}/>
+          <BookForm  editData={editData}/>
           
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={onClose}>Close</Button>
+         
         </Modal.Footer>
       </Modal>
     );

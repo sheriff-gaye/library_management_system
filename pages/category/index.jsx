@@ -27,6 +27,7 @@ const category = () => {
     );
     setData(response.data);
   };
+  console.log(data);
 
   useEffect(() => {
     getCategoris();
@@ -34,7 +35,7 @@ const category = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between p-5 align-items-start">
+      <div className="d-flex justify-content-between py-7 px-12 align-items-start">
         <CategoryModals
           showModal={showModal}
           onClose={() => setShowModal(false)}
@@ -42,7 +43,7 @@ const category = () => {
         <Button variant="dark" onClick={() => setShowModal(!showModal)}>
           Add Category <Plus />
         </Button>
-        <Button variant="danger">
+        <Button variant="primary">
         Export PDF
        </Button>
       </div>

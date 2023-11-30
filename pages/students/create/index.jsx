@@ -5,6 +5,7 @@ import Link from "next/link";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const CreateStudent = () => {
   const [studentData, setStudentData] = useState({
@@ -19,13 +20,19 @@ const CreateStudent = () => {
   });
 
   const router = useRouter();
+  const token = Cookies.get('token');
+
 
 
   const [levels, setLevel] = useState([]);
 
   const getLevel = async () => {
     const response = await axios.get(
-      process.env.NEXT_PUBLIC_APP_URL + "/level"
+      process.env.NEXT_PUBLIC_APP_URL + "/level",{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
     );
     setLevel(response.data);
   };
@@ -40,7 +47,11 @@ const CreateStudent = () => {
     try {
       await axios.post(
         `${process.env.NEXT_PUBLIC_APP_URL}/createstudents`,
-        studentData
+        studentData,{
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
       );
       router.refresh();
       toast.success("Student Registered Successfully");

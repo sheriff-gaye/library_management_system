@@ -1,5 +1,5 @@
-import { React, Fragment, useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import {  Fragment } from "react";
+import { Button, Modal } from "react-bootstrap";
 
 export const DeleteModals = ({showModal,close,onConfirm}) => {
 

@@ -51,7 +51,7 @@ const BookForm = ({ editData }) => {
   useEffect(() => {
     getCategoris();
     getAuthor();
-  }, []);
+  },[]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -202,10 +202,11 @@ const BookForm = ({ editData }) => {
           placeholder="Enter Number of Copies"
         />
       </Form.Group>
-
-      <Button variant="success" type="submit" disabled={!isComplete}>
+      <div className="d-grid">
+      <Button variant="primary" type="submit" disabled={!isComplete}>
         {action}
       </Button>
+      </div>
     </Form>
     </>
   );

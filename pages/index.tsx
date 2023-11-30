@@ -2,7 +2,7 @@ import { Row, Col, Card, Form, Button, Image } from "react-bootstrap";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import AuthLayout from "layouts/AuthLayout";
+import AuthLayout from "../layouts/AuthLayout";
 import { useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -38,8 +38,7 @@ const SignIn = () => {
         const decoded = jwtDecode(token);
 
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        Cookies.set('token', token, { expires: decoded.exp, sameSite: 'none', secure: true });
-
+        Cookies.set('token', token, { expires: decoded.exp, sameSite: 'Strict', secure: true });
 
         toast.success("User Login successfully");
         router.push("/dashboard");

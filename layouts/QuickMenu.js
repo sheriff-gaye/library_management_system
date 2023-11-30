@@ -23,19 +23,35 @@ import toast from 'react-hot-toast';
 import { useRouter
  } from 'next/navigation';
  import axios from 'axios';
+import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
 
 const QuickMenu = () => {
 
     const router =useRouter();
 
     const onLogout = async () => {
-        await axios.get(
-            `${process.env.NEXT_PUBLIC_APP_URL}/logout`
-        )
-        router.push('/');
-        toast.success("Logout Sucessfully");
-
-    }
+        try {
+          const token = Cookies.get('token');
+      
+          const decodedToken = jwtDecode(token);
+          const userId = decodedToken.userId;
+     
+          await axios.get(`${process.env.NEXT_PUBLIC_APP_URL}/logout/${userId}`,{
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+      
+          router.push('/');
+          Cookies.remove('token');
+          toast.success('Logout Successfully');
+        } catch (error) {
+          
+          console.error('Logout error:', error);
+          toast.error('Logout failed');
+        }
+      };
 
     const hasMounted = useMounted();
 

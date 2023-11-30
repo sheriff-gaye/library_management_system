@@ -10,20 +10,20 @@ const BooksPage = () => {
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
-  const getBooks = async () => {
-    const token = Cookies.get('token');
-
-    const response = await axios.get(
-      process.env.NEXT_PUBLIC_APP_URL + "/books",{
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      }
-    );
-    setData(response.data);
-  };
-
   useEffect(() => {
+    const getBooks = async () => {
+      const token = Cookies.get("token");
+
+      const response = await axios.get(
+        process.env.NEXT_PUBLIC_APP_URL + "/books",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      setData(response.data);
+    };
     getBooks();
   }, []);
 
@@ -37,11 +37,11 @@ const BooksPage = () => {
         <Button variant="dark" onClick={() => setShowModal(!showModal)}>
           Add Book <Plus />
         </Button>
-        <Button variant="danger">
-        Export PDF
-       </Button>
+        <Button variant="primary">Export PDF</Button>
       </div>
-      <BooksTable data={data} />
+      <div className="px-12 py-5">
+        <BooksTable data={data} />
+      </div>
     </div>
   );
 };

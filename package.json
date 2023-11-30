@@ -40,5 +40,8 @@
     "simplebar": "^6.2.4",
     "simplebar-react": "^3.2.3",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/js-cookie": "^3.0.6"
   }
 }

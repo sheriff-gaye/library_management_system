@@ -86,9 +86,11 @@ const AuthorsForm = ({ editData }) => {
             autoFocus
           />
         </Form.Group>
-        <Button variant="success" type="submit" disabled={!isNameValid} >
+        <div className="d-grid">
+        <Button variant="primary" type="submit" disabled={!isNameValid} >
           {action}
         </Button>
+        </div>
       </Form>
     </>
   );

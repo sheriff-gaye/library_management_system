@@ -1,16 +1,16 @@
 import React from "react";
 import { Button,  Modal } from "react-bootstrap";
-import BookForm from "./books-form";
+import LevelForm from "./level-form";
 
-export const BooksModals = ({ showModal, onClose,editData }) => {
+export const LevelModals = ({ showModal, onClose,editData }) => {
   function MyVerticallyCenteredModal(props) {
-    const title=editData ? "Update Book" : "Create Book"
+    const title=editData ? "Update Level" : "Create Level"
     return (
       <Modal
         {...props}
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        size="lg"
+      
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
@@ -18,11 +18,10 @@ export const BooksModals = ({ showModal, onClose,editData }) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <BookForm  editData={editData}/>
+          <LevelForm  editData={editData}/>
           
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={onClose}>Close</Button>
         </Modal.Footer>
       </Modal>
     );

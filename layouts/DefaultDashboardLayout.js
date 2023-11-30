@@ -8,6 +8,7 @@ import { Row, Col } from 'react-bootstrap';
 import { ToastProvider } from '../hooks/toast-provider';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
 
 const DefaultDashboardLayout = (props) => {
 	const [showMenu, setShowMenu] = useState(true);
@@ -17,12 +18,40 @@ const DefaultDashboardLayout = (props) => {
 
 	const router = useRouter();
 	const token = Cookies.get('token');
-  
-   useEffect(()=>{
-   
-	if (!token) router.push('/');
-   },[router, token])
+	const checkTokenValidity = () => {
+		try {
+			if (token) {
+				const decodedToken = jwtDecode(token);
+	
+	
+				const isTokenValid = decodedToken && decodedToken.exp * 1000 > Date.now();
+	
+				if (!isTokenValid) {
+					
+					router.push('/');
+				} else {
+					//hello
+				}
+			} else {
+				
+				router.push('/');
+			}
+		} catch (error) {
+			
+			router.push('/');
+		}
+	};
+	
 
+	useEffect(() => {
+		
+		checkTokenValidity();
+	}, [router ,token]);
+	
+
+
+
+   
    
 
 	return (		

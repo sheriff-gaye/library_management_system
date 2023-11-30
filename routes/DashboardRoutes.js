@@ -63,10 +63,10 @@ export const DashboardMenu = [
 	},
 	{
 		id: uuid(),
-		title: 'Transactions',
+		title: 'Issue Book',
 		icon: 'eye',
-		link: '/transactions'
-	},
+		link: '/issue'
+	}
 	
 	
 ];

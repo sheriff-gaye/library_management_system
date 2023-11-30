@@ -30,7 +30,7 @@ const AuthorsPage = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between p-5 align-items-start">
+      <div className="d-flex justify-content-between py-7 px-12 align-items-start">
         <AuthorsModal
           showModal={showModal}
           onClose={() => setShowModal(false)}
@@ -38,7 +38,7 @@ const AuthorsPage = () => {
         <Button variant="dark" onClick={() => setShowModal(!showModal)}>
           Add Author <Plus />
         </Button>
-        <Button variant="danger">
+        <Button variant="primary">
         Export PDF
        </Button>
       </div>

@@ -30,7 +30,7 @@ const LevelPage = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between p-8 align-items-start">
+      <div className="d-flex justify-content-between py-7 px-12 align-items-start">
         <LevelModals
           showModal={showModal}
           onClose={() => setShowModal(false)}
@@ -38,7 +38,7 @@ const LevelPage = () => {
         <Button variant="dark" onClick={() => setShowModal(!showModal)}>
           Add Student Level 
         </Button>
-       <Button variant="danger">
+       <Button variant="primary">
         Export PDF
        </Button>
       </div>

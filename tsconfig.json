@@ -21,7 +21,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "hooks/toast-provider.tsx", "helpers/return-days.tsx", "pages/dashboard.jsx", "sub-components/dashboard/TasksPerformance.tsx"  ],
   "exclude": [
     "node_modules"
   ]

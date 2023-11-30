@@ -1,4 +1,4 @@
-import { MoreHorizontal, MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { Eye, MoreHorizontal, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Button, Dropdown, Table } from "react-bootstrap";
 import formatDate from "../../helpers/format.date";
@@ -6,11 +6,11 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { DeleteModals } from "../modals/confirm-delete";
 import { useRouter } from "next/navigation";
-import { CategoryModals } from "./category-modal";
+import { LevelModals } from "./level-modal";
 import Link from "next/link";
 import Cookies from "js-cookie";
 
-const CategoryTable = ({ data }) => {
+const LevelTable = ({ data }) => {
   const [showDelete, setShowDelete] = useState(false);
   const [categoryIdToDelete, setCategoryIdToDelete] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -32,16 +32,15 @@ const CategoryTable = ({ data }) => {
   const router = useRouter();
 
   const onDelete = async (id) => {
-    const token = Cookies.get('token');
-
+    const token = Cookies.get("token");
     try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_APP_URL}/category/${id}`,{
+      await axios.delete(`${process.env.NEXT_PUBLIC_APP_URL}/level/${id}`,{
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
       router.refresh();
-      toast.success("Category Deleted Successfully");
+      toast.success("Level Deleted Successfully");
       handleCloseDeleteModal();
     } catch (error) {
       toast.error("Something went wrong");
@@ -50,26 +49,33 @@ const CategoryTable = ({ data }) => {
   };
 
 
-  const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-    (<Link
-        href=""
-        ref={ref}
-        onClick={(e) => {
-            e.preventDefault();
-            onClick(e);
-        }}
-        className="text-muted text-primary-hover">
-        {children}
-    </Link>)
-));
+  const CustomToggle = React.forwardRef<
+    HTMLAnchorElement,
+    React.ComponentPropsWithoutRef<typeof Link>
+  >(({ children, onClick }, ref) => (
+    <Link
+      href=""
+      ref={ref}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick(e);
+      }}
+      className="text-muted text-primary-hover"
+    >
+      {children}
+    </Link>
+  ));
 
-CustomToggle.displayName = 'CustomToggle';
+  CustomToggle.displayName = "CustomToggle";
 
   return (
-    <div className="table-responsive d-flex justify-content-between px-5 py-5 table-responsive">
-      <Table className="text-nowrap table overflow-x-scroll  table ">
+    <div className="px-12 py-5">
+      <Table className="text-nowrap table overflow-x-scroll align-middle">
         <thead className="table-dark">
           <tr>
+            <th scope="col" className="text-white text-uppercase">
+              code
+            </th>
             <th scope="col" className="text-white text-uppercase">
               name
             </th>
@@ -85,9 +91,11 @@ CustomToggle.displayName = 'CustomToggle';
           {data.length > 0 ? (
             data.map((item) => (
               <tr key={item.id}>
+                <td>{item.code}</td>
                 <td>{item.name}</td>
                 <td>{formatDate(item.createdAt)}</td>
                 <td>
+                
                   <Dropdown>
                     <Dropdown.Toggle
                       variant="link"
@@ -97,11 +105,13 @@ CustomToggle.displayName = 'CustomToggle';
                       <MoreVertical className="text-muted" />
                     </Dropdown.Toggle>
 
-                    <Dropdown.Menu align="right">
+                    <Dropdown.Menu align="start">
+        
+                     
                       <Dropdown.Item onClick={() => handleUpdate(item)}>
                         <Pencil size={15} className="text-primary" /> Update
                       </Dropdown.Item>
-                      <Dropdown.Item onClick={() => handleShowDelete(item.id)}>
+                      <Dropdown.Item  onClick={() => handleShowDelete(item.id)}>
                         <Trash2 size={15} className="text-danger" /> Delete
                       </Dropdown.Item>
                     </Dropdown.Menu>
@@ -111,7 +121,7 @@ CustomToggle.displayName = 'CustomToggle';
             ))
           ) : (
             <tr>
-              <td colSpan="3" className="text-center">
+              <td colSpan={3} className="text-center">
                 <div className="d-flex justify-content-center">
                   <span className="fs-4">No data available.</span>
                 </div>
@@ -126,7 +136,7 @@ CustomToggle.displayName = 'CustomToggle';
         onConfirm={() => onDelete(categoryIdToDelete)}
       />
 
-      <CategoryModals
+      <LevelModals
         showModal={showModal}
         onClose={() => setShowModal(false)}
         editData={editData}
@@ -135,4 +145,4 @@ CustomToggle.displayName = 'CustomToggle';
   );
 };
 
-export default CategoryTable;
+export default LevelTable;

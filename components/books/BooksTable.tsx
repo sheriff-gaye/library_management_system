@@ -1,13 +1,21 @@
-import { Copy, Eye, MoreHorizontal, MoreVertical, Pencil, Trash2 } from "lucide-react";
+import {
+  Copy,
+  Eye,
+  MoreHorizontal,
+  MoreVertical,
+  Pencil,
+  Trash2
+} from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Button, Dropdown, Table } from "react-bootstrap";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { DeleteModals } from "../modals/confirm-delete";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { BooksModals } from "./books-modal";
 import Link from "next/link";
 import Cookies from "js-cookie";
+import { copiesStatus } from "../../helpers/book-status";
 
 const BooksTable = ({ data }) => {
   const [authors, setAuthors] = useState([]);
@@ -18,8 +26,7 @@ const BooksTable = ({ data }) => {
   const [showModal, setShowModal] = useState(false);
 
   const [editData, setEditData] = useState();
-  const token = Cookies.get('token');
-
+  const token = Cookies.get("token");
 
   const handleUpdate = (categoryData) => {
     setEditData(categoryData);
@@ -36,9 +43,10 @@ const BooksTable = ({ data }) => {
   const getAuthors = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_APP_URL}/authors`,{
+        `${process.env.NEXT_PUBLIC_APP_URL}/authors`,
+        {
           headers: {
-            'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           }
         }
       );
@@ -51,9 +59,10 @@ const BooksTable = ({ data }) => {
   const getCategories = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_APP_URL}/category`,{
+        `${process.env.NEXT_PUBLIC_APP_URL}/category`,
+        {
           headers: {
-            'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           }
         }
       );
@@ -69,15 +78,16 @@ const BooksTable = ({ data }) => {
   }, []);
 
   const router = useRouter();
+  const isBookRoute = router.pathname === "/books";
 
-  const onDelete = async (id) => {
+  const onDelete = async (id: string) => {
     try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_APP_URL}/books/${id}`,{
+      await axios.delete(`${process.env.NEXT_PUBLIC_APP_URL}/books/${id}`, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         }
       });
-      router.refresh();
+      router.reload();
       toast.success("Book Deleted Successfully");
       handleCloseDeleteModal();
     } catch (error) {
@@ -86,23 +96,27 @@ const BooksTable = ({ data }) => {
     }
   };
 
-  const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-    (<Link
-        href=""
-        ref={ref}
-        onClick={(e) => {
-            e.preventDefault();
-            onClick(e);
-        }}
-        className="text-muted text-primary-hover">
-        {children}
-    </Link>)
-));
+  const CustomToggle = React.forwardRef<
+    HTMLAnchorElement,
+    React.ComponentPropsWithoutRef<typeof Link>
+  >(({ children, onClick }, ref) => (
+    <Link
+      href=""
+      ref={ref}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick(e);
+      }}
+      className="text-muted text-primary-hover"
+    >
+      {children}
+    </Link>
+  ));
 
-CustomToggle.displayName = 'CustomToggle';
+  CustomToggle.displayName = "CustomToggle";
 
   return (
-    <div className="table-responsive d-flex justify-content-between  px-12 py-5">
+    <div >
       <Table className="text-nowrap table overflow-x-scroll align-middle">
         <thead className="table-dark justify-content-around">
           <tr>
@@ -121,19 +135,21 @@ CustomToggle.displayName = 'CustomToggle';
             <th scope="col" className="text-white text-uppercase">
               publisher
             </th>
-            <th
-              scope="col"
-              className="text-white text-uppercase justify-content-end"
-            >
-              action
-            </th>
+            {isBookRoute && (
+              <th
+                scope="col"
+                className="text-white text-uppercase justify-content-end"
+              >
+                action
+              </th>
+            )}
           </tr>
         </thead>
         <tbody>
           {data.length > 0 ? (
             data.map((item) => (
               <tr key={item.id}>
-                <td  className="align-middle">
+                <td className="align-middle">
                   {
                     category.find((category) => category.id === item.categoryId)
                       ?.name
@@ -141,46 +157,50 @@ CustomToggle.displayName = 'CustomToggle';
                 </td>
                 <td className="align-middle">{item.title}</td>
                 <td>
-                  {
-                   authors.find(author => author.id === item.authorId)?.firstName + " " + authors.find(author => author.id === item.authorId)?.lastName
-
-                  }
+                  {authors.find((author) => author.id === item.authorId)
+                    ?.firstName +
+                    " " +
+                    authors.find((author) => author.id === item.authorId)
+                      ?.lastName}
                 </td>
 
-                <td className="align-middle"> {item.copies}</td>
+                <td className="align-middle"> {copiesStatus(item.copies)}</td>
                 <td className="align-middle">{item.publisher}</td>
-                <td className="align-middle">
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      variant="link"
-                      id="dropdown-basic"
-                      as={CustomToggle}
-                     
-                    >
-                      <MoreVertical className="text-muted" />
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu align="right">
-                      <Dropdown.Item
-                        onClick={() => router.push(`books/${item.id}`)}
+                {isBookRoute && (
+                  <td className="align-middle">
+                    <Dropdown>
+                      <Dropdown.Toggle
+                        variant="link"
+                        id="dropdown-basic"
+                        as={CustomToggle}
                       >
-                        <Eye size={15} className="text-warning" /> View
-                      </Dropdown.Item>
+                        <MoreVertical className="text-muted" />
+                      </Dropdown.Toggle>
 
-                      <Dropdown.Item onClick={() => handleUpdate(item)}>
-                        <Pencil size={15} className="text-primary" /> Update
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={() => handleShowDelete(item.id)}>
-                        <Trash2 size={15} className="text-danger" /> Delete
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </td>
+                      <Dropdown.Menu align="start">
+                        <Dropdown.Item
+                          onClick={() => router.push(`books/${item.id}`)}
+                        >
+                          <Eye size={15} className="text-warning" /> View
+                        </Dropdown.Item>
+
+                        <Dropdown.Item onClick={() => handleUpdate(item)}>
+                          <Pencil size={15} className="text-primary" /> Update
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => handleShowDelete(item.id)}
+                        >
+                          <Trash2 size={15} className="text-danger" /> Delete
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </td>
+                )}
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="5" className="text-center">
+              <td colSpan={5} className="text-center">
                 <div className="d-flex justify-content-center">
                   <span className="fs-4">No data available.</span>
                 </div>

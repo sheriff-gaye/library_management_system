@@ -1,15 +1,16 @@
-import React, { useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
-import CategoryForm from "./category-form";
+import React from "react";
+import { Button,  Modal } from "react-bootstrap";
+import { IssueForm } from "./issue-form";
 
-export const CategoryModals = ({ showModal, onClose,editData }) => {
+export const CreateIssueModal = ({ showModal, onClose,returnData }) => {
   function MyVerticallyCenteredModal(props) {
-    const title=editData ? "Update Category" : "Create Cayegory"
+    const title=returnData ? "ReIssue Book" : "Issue Book"
     return (
       <Modal
         {...props}
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
@@ -17,11 +18,11 @@ export const CategoryModals = ({ showModal, onClose,editData }) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <CategoryForm  editData={editData}/>
+          <IssueForm  editData={returnData}/>
           
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={onClose}>Close</Button>
+
         </Modal.Footer>
       </Modal>
     );
