@@ -23,37 +23,33 @@ const DefaultDashboardLayout = (props) => {
 			if (token) {
 				const decodedToken = jwtDecode(token);
 	
-	
 				const isTokenValid = decodedToken && decodedToken.exp * 1000 > Date.now();
 	
 				if (!isTokenValid) {
 					
+					console.log("Token expired, logging out user");
+				
 					router.push('/');
 				} else {
-					//hello
+					console.log("Token is valid");
 				}
 			} else {
-				
+				console.log("Token not present, redirecting to login");
 				router.push('/');
 			}
 		} catch (error) {
-			
+			console.error("Error decoding token or other issue:", error);
 			router.push('/');
 		}
 	};
 	
-
 	useEffect(() => {
-		
+		// Call the checkTokenValidity function when the component mounts
 		checkTokenValidity();
-	}, [router ,token]);
+	}, [token]); // Ensure that the useEffect depends on the token variable
+
 	
-
-
-
-   
-   
-
+	
 	return (		
 		<div id="db-wrapper" className={`${showMenu ? '' : 'toggled'}`}>
 			<div className="navbar-vertical navbar">

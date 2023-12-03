@@ -22,9 +22,6 @@ const Home = () => {
   const [issued, setIssued]=useState()
   const [returned , setReturned]=useState()
 
-
-  console.log(issued,books,returned);
-
   const getBooks = async () => {
     const response = await axios.get(
       process.env.NEXT_PUBLIC_APP_URL + "/books",

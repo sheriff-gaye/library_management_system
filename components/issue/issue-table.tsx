@@ -143,10 +143,10 @@ export const IssueTable = ({ data }) => {
                 Book Title
               </th>
               <th scope="col" className="text-white text-uppercase">
-                Status
+                Book Status
               </th>
               <th scope="col" className="text-white text-uppercase">
-                Days Left
+                Return Status
               </th>
               <th scope="col" className="text-white text-uppercase">
                 Issue Date

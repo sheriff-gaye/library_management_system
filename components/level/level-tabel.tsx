@@ -69,7 +69,7 @@ const LevelTable = ({ data }) => {
   CustomToggle.displayName = "CustomToggle";
 
   return (
-    <div className="px-12 py-5">
+    <div className="px-12 py-5   table-responsive">
       <Table className="text-nowrap table overflow-x-scroll align-middle">
         <thead className="table-dark">
           <tr>

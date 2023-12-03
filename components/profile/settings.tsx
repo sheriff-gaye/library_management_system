@@ -1,10 +1,10 @@
-// import node module libraries
+
 import { Col, Row, Form, Card, Button, Image } from "react-bootstrap";
 
-// import widget as custom components
-import { FormSelect, DropFiles } from "widgets";
+import { FormSelect } from "../../widgets/form-select/FormSelect";
+import {  DropFiles } from "../../widgets/dropfiles/DropFiles";
 
-const GeneralSetting = () => {
+export const GeneralSetting = () => {
   const countryOptions = [
     { value: "India", label: "India" },
     { value: "US", label: "US" },
@@ -57,27 +57,7 @@ const GeneralSetting = () => {
                 </div>
               </Col>
             </Row>
-            {/* col */}
-            <Row className="mb-8">
-              <Col md={3} className="mb-3 mb-md-0">
-                {/* heading */}
-                <h5 className="mb-0">Cover photo</h5>
-              </Col>
-              <Col md={9}>
-                {/* dropzone input */}
-                <div>
-                  <Form
-                    action="#"
-                    className="dropzone mb-3 py-10 border-dashed"
-                  >
-                    <DropFiles />
-                  </Form>
-                  <Button variant="outline-white" type="submit">
-                    Change{" "}
-                  </Button>
-                </div>
-              </Col>
-            </Row>
+       
             <div>
               {/* border */}
               <div className="mb-6">
@@ -221,4 +201,3 @@ const GeneralSetting = () => {
   );
 };
 
-export default GeneralSetting;

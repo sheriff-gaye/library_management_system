@@ -116,8 +116,8 @@ const BooksTable = ({ data }) => {
   CustomToggle.displayName = "CustomToggle";
 
   return (
-    <div >
-      <Table className="text-nowrap table overflow-x-scroll align-middle">
+    <div  className="table-responsive">
+      <Table className="text-nowrap table overflow-x-scroll align-middle ">
         <thead className="table-dark justify-content-around">
           <tr>
             <th scope="col" className="text-white text-uppercase">
